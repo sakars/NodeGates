@@ -1,7 +1,8 @@
 #include <SFML/Graphics.hpp>
-
+#include <Windows.h>
 int main()
 {
+    HideConsole();
     sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
     sf::CircleShape shape(100.f);
     shape.setFillColor(sf::Color::Green);
@@ -21,4 +22,19 @@ int main()
     }
 
     return 0;
+}
+
+void HideConsole()
+{
+    ::ShowWindow(::GetConsoleWindow(), SW_HIDE);
+}
+
+void ShowConsole()
+{
+    ::ShowWindow(::GetConsoleWindow(), SW_SHOW);
+}
+
+bool IsConsoleVisible()
+{
+    return ::IsWindowVisible(::GetConsoleWindow()) != FALSE;
 }
