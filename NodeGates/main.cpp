@@ -2,7 +2,7 @@
 #include <Windows.h>
 #include "Node.h"
 #include <iostream>
-namespace con {
+namespace con {//functions for console
     void HideConsole()
     {
         ::ShowWindow(::GetConsoleWindow(), SW_HIDE);
@@ -19,7 +19,7 @@ namespace con {
     }
 }
 
-namespace win {
+namespace win {//functions for window
 	void zoomViewAt(sf::Vector2i pixel, sf::RenderWindow& window, float zoom, sf::View &v)
 	{
 		const sf::Vector2f beforeCoord(window.mapPixelToCoords(pixel));
@@ -38,42 +38,45 @@ int main()
 {
     con::HideConsole();
 
-	//stuff declaration
-	nd::Node master(3, 2);
+	//master IO field
+	nd::Node master(2, 2);
 
+
+	//top bar
 	struct preset
 	{
 		sf::String name;
 		int node;
 	};
-
 	std::vector<preset> presetStorage = {
 		{"AND", 1}, {"NOT", 2}, {"OR", 3}
 	};
-
 	preset tempCreate = { //for placement
 		"", -1
 	};
+
+	//click
 	int clickitey = -1;
 
-	//for drag
+	//drag
 	int dragRelative[4] = {-1, 0, 0, -1};
 	int nodeDraw[5] = {-1, 0, 0, 0, 0}; //on/off x y ind1 ind2
+	sf::Vector2f mousePosO;
 
-	//for camera
+	//camera
 	sf::RenderWindow window(sf::VideoMode(1920, 1080), "NodeGates", sf::Style::Close | sf::Style::Resize);
 	sf::VertexArray va(sf::Quads);
 	sf::VertexArray nodes(sf::Lines);
 	sf::View view = window.getView();
 	view.move(sf::Vector2f(-75.f, -8.f));
-
+	
+	//font
 	sf::Font font;
 	if (!font.loadFromFile("./FuturaNowText-Bd.otf")) {}
 
-	sf::Vector2f mousePosO;
-
     while (window.isOpen())
     {
+		//events
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -111,12 +114,12 @@ int main()
 			dragRelative[3] = -1;
 		}
 
-		//mouse i
+		//mouse I
 		if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
 			sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
 			if(dragRelative[0] == -1){
-				//node io drag start
 				if (nodeDraw[0] == -1) {
+					//pin connection drag start
 					for (int i = 0; i < master.nodes.size(); i++) {
 						for (int k = 0; k < master.nodes[i].output.values.size(); k++) {
 							if (master.nodes[i].x + 140.f - 7 < mousePos.x &&
@@ -133,8 +136,8 @@ int main()
 							}
 						}
 					}
-					//node drag start
 					if (nodeDraw[0] == -1) {
+						//I settings
 						for (int k = 0; k < master.input.values.size(); k++) {
 							if (master.input.x + 60 - 7 - 20 < mousePos.x &&
 								master.input.x + 60 + 7 - 20 > mousePos.x&&
@@ -145,6 +148,7 @@ int main()
 								break;
 							}
 						}
+						//create new node from master
 						if (-20 < mousePos.x &&
 							-70 > mousePos.x &&
 							50 < mousePos.y &&
@@ -153,6 +157,7 @@ int main()
 							win::nodeMain();
 						}
 						if (clickitey == -1) {
+							//I pin connection drag start
 							for (int k = 0; k < master.input.values.size(); k++) {
 								if (master.input.x + 60.f - 7 < mousePos.x &&
 									master.input.x + 60.f + 7 > mousePos.x&&
@@ -168,6 +173,7 @@ int main()
 								}
 							}
 							if (nodeDraw[0] == -1) {
+								//node drag start
 								for (int i = 0; i < master.nodes.size(); i++) {
 									if (master.nodes[i].x < mousePos.x &&
 										master.nodes[i].x + 140.f > mousePos.x&&
@@ -181,6 +187,7 @@ int main()
 									}
 								}
 								if (dragRelative[0] == -1) {
+									//IO node drag start
 									if (master.output.x < mousePos.x &&
 										master.output.x + 140.0f > mousePos.x&&
 										master.output.y < mousePos.y &&
@@ -200,6 +207,7 @@ int main()
 										dragRelative[2] = mousePos.y - master.input.y;
 									}
 									else if (tempCreate.node == -1) {
+										//spawn node from preset
 										for (int i = 0; i < presetStorage.size(); i++) {
 											preset c = presetStorage[i];
 											if (i * 100 < mousePos.x &&
@@ -218,11 +226,13 @@ int main()
 					}
 				}
 				else {
+				//while dragging pin connection
 					nodes.append(sf::Vertex(sf::Vector2f(nodeDraw[1], nodeDraw[2])));
 					nodes.append(sf::Vertex(sf::Vector2f(mousePos.x, mousePos.y)));
 				}
 			}
 			else {
+				//while dragging node
 				if (dragRelative[0] == -3) {
 					master.input.x = mousePos.x - dragRelative[1];
 					master.input.y = mousePos.y - dragRelative[2];
@@ -238,7 +248,7 @@ int main()
 			}
 		}
 		else {
-			//end drag
+			//set value of I
 			if (clickitey != -1) {
 				master.set(clickitey, !master.input.values[clickitey]);
 				clickitey = -1;
@@ -246,6 +256,7 @@ int main()
 			else {
 				dragRelative[0] = -1;
 				if (nodeDraw[0] != -1) {
+					//connect nodes
 					sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window));
 					bool found = false;
 					std::vector<int> h = {};
@@ -307,7 +318,7 @@ int main()
 					va.append(currentCorner);
 				}
 			}
-			//IO pins
+			//pins
 			for (int k = 0; k < master.nodes[i].input.values.size(); k++)
 			{
 				for (int o = 0; o < 2; o++)
@@ -361,6 +372,7 @@ int main()
 				va.append(currentCorner);
 			}
 		}
+		//main IO pins
 		for (int k = 0; k < master.input.values.size(); k++)
 		{
 			bool yes = master.input.values[k];
@@ -436,7 +448,6 @@ int main()
 		sf::Text text(endDisplay, font);
 		text.setCharacterSize(20);
 		text.setFillColor(sf::Color::White);
-
 
 		//plus
 		va.append(sf::Vertex(sf::Vector2f(-30 - 20, 10)));
