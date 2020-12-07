@@ -1,5 +1,6 @@
 #include <vector>
 #include <set>
+#include <SFML\System\String.hpp>
 #pragma once
 namespace nd {
 	class Input {
@@ -7,6 +8,8 @@ namespace nd {
 		Input(int count);
 		std::vector<bool> values;
 		std::vector<bool> dirty;
+		int x;
+		int y;
 		std::vector<std::vector<std::vector<int>>> destinations;
 		void SetNode(int id, bool value);
 		void addNodes(int count);
@@ -16,6 +19,8 @@ namespace nd {
 		Output(int count);
 		std::vector<bool> values;
 		std::vector<bool> dirty;
+		int x;
+		int y;
 		std::vector<std::vector<std::vector<int>>> destinations;
 	};
 	class Node
@@ -25,6 +30,9 @@ namespace nd {
 		Node(int type);
 		Input input;
 		std::vector<Node> nodes;
+		int x;
+		int y;
+		sf::String name;
 		Output output;
 		int type;//0-nested 1-and 2-not
 		void run();

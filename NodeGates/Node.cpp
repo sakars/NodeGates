@@ -1,18 +1,22 @@
 #include "Node.h"
 namespace nd {
-	Node::Node(int i, int o) : input{ i }, output{ o }, nodes{}, dirty{}, type{ 0 } {
+
+	Node::Node(int i, int o) : input{ i }, output{ o }, nodes{}, dirty{}, type{ 0 }, x{ 200 }, y{ 200 }, name{ "BLANK" } {
 	}
-	Node::Node(int typ) : input{ 1 }, output{ 1 }, nodes{}, dirty{}, type{ typ }{
+	Node::Node(int typ) : input{ 1 }, output{ 1 }, nodes{}, dirty{}, type{ typ }, x{ 200 }, y{ 200 }, name{ "BLANK" }{
 		if (type == 1) {//and
 			input.addNodes(1);
+			name = "AND";
 		}
 		if (type == 2) {//not
 			input.dirty[0] = true;
 			output.values[0] = true;
 			output.dirty[0] = true;
+			name = "NOT";
 		}
 		if (type == 3) {//or
 			input.addNodes(1);
+			name = "OR";
 		}
 	}
 	void Node::add(Node node) {
@@ -97,7 +101,7 @@ namespace nd {
 		
 	}
 	
-	Input::Input(int count) : values{}, dirty{}, destinations{}{
+	Input::Input(int count) : values{}, dirty{}, destinations{}, x{ 0 }, y{ 200 }{
 		for (int i = 0; i < count; i++) {
 			values.push_back(false);
 			dirty.push_back(false);
@@ -112,7 +116,7 @@ namespace nd {
 			destinations.push_back(std::vector<std::vector<int>>());
 		}
 	}
-	Output::Output(int count) : values{}, dirty{}, destinations{}{
+	Output::Output(int count) : values{}, dirty{}, destinations{}, x{ 500 }, y{ 200 }{
 		for (int i = 0; i < count; i++) {
 			values.push_back(false);
 			dirty.push_back(false);
