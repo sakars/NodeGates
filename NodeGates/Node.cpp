@@ -11,18 +11,15 @@ namespace nd {
 		if (type == 1) {//and
 			input.addNodes(1);
 			name = "AND";
-		}
-		if (type == 2) {//not
+		}else if (type == 2) {//not
 			input.dirty[0] = true;
 			output.values[0] = true;
 			output.dirty[0] = true;
 			name = "NOT";
-		}
-		if (type == 3) {//or
+		}else if (type == 3) {//or
 			input.addNodes(1);
 			name = "OR";
-		}
-		else {//custom node-parse from save
+		}else {//custom node-parse from save
 			//configure I/O size
 			input.addNodes(templates.loaded[typ - 10].inS - 1);
 			output.addNodes(templates.loaded[typ - 10].outS - 1);
