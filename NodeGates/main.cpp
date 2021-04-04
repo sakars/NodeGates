@@ -1,4 +1,4 @@
-#include <SFML/Graphics.hpp>
+#include <SFML\Main.hpp>
 #include <Windows.h>
 #include "Node.h"
 #include <iostream>
@@ -75,6 +75,7 @@ int main()
 	if (!font.loadFromFile("./FuturaNowText-Bd.otf")) {}
 
     while (window.isOpen())
+
     {
 		//events
         sf::Event event;
@@ -489,7 +490,8 @@ int main()
 		//yes
         window.display();
     }
-
+    //nd::NodeSave loader=nd::NodeSave();
+    
     return 0;
 }
 
