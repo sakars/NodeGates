@@ -1,4 +1,4 @@
-#include <SFML/Graphics.hpp>
+#include <SFML\Main.hpp>
 #include <Windows.h>
 #include "Node.h"
 #include <iostream>
@@ -21,11 +21,11 @@ namespace con {
 
 int main()
 {
-    con::HideConsole();
+    //con::HideConsole();
     //con::ShowConsole();
-    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
-    sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Green);
+    //sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
+    //sf::CircleShape shape(100.f);
+    //shape.setFillColor(sf::Color::Green);
     /*nd::Node test(2, 1);
     test.add(nd::Node(2, 1));
     test.add(nd::Node(1));
@@ -66,7 +66,7 @@ int main()
     std::cout << test.output.values[0] << std::endl;*/
     //std::cout << test.input.values[0];// << test.input.values[1] << std::endl;
     //std::cout << test.nodes[0].input.values[0];// << test.nodes[0].input.values[1] << std::endl;
-    while (window.isOpen())
+    /*while (window.isOpen())
     {
         sf::Event event;
         while (window.pollEvent(event))
@@ -78,8 +78,9 @@ int main()
         window.clear();
         window.draw(shape);
         window.display();
-    }
-
+    }*/
+    //nd::NodeSave loader=nd::NodeSave();
+    
     return 0;
 }
 
