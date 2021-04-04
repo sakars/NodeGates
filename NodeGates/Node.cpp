@@ -48,6 +48,21 @@ namespace nd {
 			break;
 		}
 	}
+	void Node::disconnect(int nodeId1,int pin1,int nodeId2,int pin2) {
+		std::vector<int> dest = { nodeId2,pin2 };
+		switch (nodeId1)
+		{
+		case -1://input
+			remove(input.destinations[pin1].begin(), input.destinations[pin1].end(),dest);
+			break;
+		case -2://output
+			remove(output.destinations[pin1].begin(), output.destinations[pin1].end(), dest);
+			break;
+		default:
+			remove(nodes[nodeId1].output.destinations[pin1].begin(), nodes[nodeId1].output.destinations[pin1].end(), dest);
+			break;
+		}
+	}
 	void Node::run() {
 		if(type==0){//nested
 			std::set<int> newStack;

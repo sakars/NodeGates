@@ -1,5 +1,6 @@
 #include <vector>
 #include <set>
+#include <algorithm>
 #include <SFML\System\String.hpp>
 #pragma once
 namespace nd {
@@ -37,6 +38,7 @@ namespace nd {
 		int type;//0-nested 1-and 2-not
 		void run();
 		void connect(int nodeId1, int pin1, int nodeId2, int pin2);
+		void disconnect(int nodeId1, int pin1, int nodeId2, int pin2);
 		std::set<int> dirty;
 		void add(Node node);
 		void set(int i, bool value);
