@@ -1,5 +1,7 @@
 #include <vector>
 #include <set>
+#include <algorithm>
+#include <SFML\System\String.hpp>
 #include <string>
 #include <iostream>
 #include <sstream>
@@ -34,6 +36,8 @@ namespace nd {
 		Input(int count);
 		std::vector<bool> values;
 		std::vector<bool> dirty;
+		int x;
+		int y;
 		std::vector<std::vector<std::vector<int>>> destinations;
 		void SetNode(int id, bool value);
 		void addNodes(int count);
@@ -43,6 +47,8 @@ namespace nd {
 		Output(int count);
 		std::vector<bool> values;
 		std::vector<bool> dirty;
+		int x;
+		int y;
 		std::vector<std::vector<std::vector<int>>> destinations;
 		void addNodes(int count);
 	};
@@ -53,10 +59,14 @@ namespace nd {
 		Node(int type);
 		Input input;
 		std::vector<Node> nodes;
+		int x;
+		int y;
+		sf::String name;
 		Output output;
 		int type;//0-nested 1-and 2-not
 		void run();
 		void connect(int nodeId1, int pin1, int nodeId2, int pin2);
+		void disconnect(int nodeId1, int pin1, int nodeId2, int pin2);
 		std::set<int> dirty;
 		void add(Node node);
 		void set(int i, bool value);

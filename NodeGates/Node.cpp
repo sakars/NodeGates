@@ -3,21 +3,23 @@
 #include <iostream>
 #include <string>
 namespace nd {
-	Node::Node(int i, int o) : input{ i }, output{ o }, nodes{}, dirty{}, type{ 0 } {
+
+	Node::Node(int i, int o) : input{ i }, output{ o }, nodes{}, dirty{}, type{ 0 }, x{ 200 }, y{ 200 }, name{ "BLANK" } {
 	}
-	Node::Node(int typ) : input{ 1 }, output{ 1 }, nodes{}, dirty{}, type{ typ }{
-		if (typ == 1) {//and
+
+	Node::Node(int typ) : input{ 1 }, output{ 1 }, nodes{}, dirty{}, type{ typ }, x{ 200 }, y{ 200 }, name{ "BLANK" }{
+		if (type == 1) {//and
 			input.addNodes(1);
-		}else
-		if (typ == 2) {//not
+			name = "AND";
+		}else if (type == 2) {//not
 			input.dirty[0] = true;
 			output.values[0] = true;
 			output.dirty[0] = true;
-		}else
-		if (typ == 3) {//or
+			name = "NOT";
+		}else if (type == 3) {//or
 			input.addNodes(1);
-		}
-		else {//custom node-parse from save
+			name = "OR";
+		}else {//custom node-parse from save
 			//configure I/O size
 			input.addNodes(templates.loaded[typ - 10].inS - 1);
 			output.addNodes(templates.loaded[typ - 10].outS - 1);
@@ -69,6 +71,21 @@ namespace nd {
 			break;
 		default:
 			nodes[nodeId1].output.destinations[pin1].push_back(dest);
+			break;
+		}
+	}
+	void Node::disconnect(int nodeId1,int pin1,int nodeId2,int pin2) {
+		std::vector<int> dest = { nodeId2,pin2 };
+		switch (nodeId1)
+		{
+		case -1://input
+			remove(input.destinations[pin1].begin(), input.destinations[pin1].end(),dest);
+			break;
+		case -2://output
+			remove(output.destinations[pin1].begin(), output.destinations[pin1].end(), dest);
+			break;
+		default:
+			remove(nodes[nodeId1].output.destinations[pin1].begin(), nodes[nodeId1].output.destinations[pin1].end(), dest);
 			break;
 		}
 	}
@@ -183,7 +200,7 @@ namespace nd {
 		}
 	}
 	
-	Input::Input(int count) : values{}, dirty{}, destinations{}{
+	Input::Input(int count) : values{}, dirty{}, destinations{}, x{ 0 }, y{ 200 }{
 		for (int i = 0; i < count; i++) {
 			values.push_back(false);
 			dirty.push_back(false);
@@ -197,7 +214,7 @@ namespace nd {
 			destinations.push_back(std::vector<std::vector<int>>());
 		}
 	}
-	Output::Output(int count) : values{}, dirty{}, destinations{}{
+	Output::Output(int count) : values{}, dirty{}, destinations{}, x{ 500 }, y{ 200 }{
 		for (int i = 0; i < count; i++) {
 			values.push_back(false);
 			dirty.push_back(false);
